@@ -27,7 +27,7 @@ sys_wait(void)
 }
 
 int
-ssys_kill(void)
+sys_kill(void)
 {
   int pid;
   int signum;
