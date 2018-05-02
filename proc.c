@@ -162,13 +162,13 @@ userinit(void)
   p->pending_signals = 0;
   p->signal_mask = 0;
   for (int i = 0; i < 32; i++) {
-    p->signal_handlers[i] = SIG_DFL;
+    p->signal_handlers[i] = (void*)SIG_DFL;
   }
   p->tf_backup = 0;
   p->ignore_signals = 0;
   p->stopped = 0;
 
-  change_state(p, RUNNABLE);
+  p->state = RUNNABLE;
 
   popcli();
 }
@@ -529,7 +529,7 @@ wakeup(void *chan)
 // Process won't exit until it returns
 // to user space (see trap in trap.c).
 int
-kill(int pid)
+kill(int pid, int signum)
 {
   struct proc *p;
 
