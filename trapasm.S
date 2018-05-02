@@ -1,4 +1,14 @@
 #include "mmu.h"
+#include "syscall.h"
+#include "traps.h"
+
+.globl invoke_sigret_start
+invoke_sigret_start:
+  movl $SYS_sigret, %eax
+  int $T_SYSCALL
+
+ .globl invoke_sigret_end
+invoke_sigret_end:
 
   # vectors.S sends all traps here.
 .globl alltraps
