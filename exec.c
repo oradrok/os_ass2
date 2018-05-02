@@ -99,9 +99,22 @@ exec(char *path, char **argv)
   curproc->sz = sz;
   curproc->tf->eip = elf.entry;  // main
   curproc->tf->esp = sp;
+
+  // ass 2
+  int n = sizeof(curproc->signal_handlers) / sizeof(curproc->signal_handlers[0]);
+  for(int i = 0; i < n; i++) {
+    void* handler = curproc->signal_handlers[i];
+    if (handler == (void*)SIG_IGN) {
+      continue;
+    }
+    curproc->signal_handlers[i] = SIG_DFL;
+  }
+
   switchuvm(curproc);
   freevm(oldpgdir);
   return 0;
+
+
 
  bad:
   if(pgdir)

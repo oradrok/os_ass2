@@ -27,13 +27,18 @@ sys_wait(void)
 }
 
 int
-sys_kill(void)
+ssys_kill(void)
 {
   int pid;
+  int signum;
 
   if(argint(0, &pid) < 0)
     return -1;
-  return kill(pid);
+
+  if(argint(1, &signum) < 0)
+    return -1;
+
+  return kill(pid, signum);
 }
 
 int
@@ -88,4 +93,32 @@ sys_uptime(void)
   xticks = ticks;
   release(&tickslock);
   return xticks;
+}
+
+//ass2
+int sys_sigprocmask(void) {
+  int sigmask;
+  if (argint(0, &sigmask) < 0){
+    return -1;
+  }
+  return (int)sigprocmask(sigmask);
+}
+
+int sys_signal(void) {
+  int signum;
+  int handler;
+
+  if (argint(0, &signum) < 0){
+    return -1;
+  }
+  if (argint(1, &handler) < 0){
+    return -1;
+  }
+
+  return (int)signal(signum, (sighandler_t)handler);
+}
+
+int sys_sigret(void) {
+  sigret();
+  return 1;
 }
