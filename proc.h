@@ -1,3 +1,9 @@
+#define SIG_DFL (-1) /* d e f a u l t    s i g n a l     h a n d li n g */
+#define SIG_IGN 1 /* i g n o r e s i g n a l */
+#define SIGKILL 9
+#define SIGSTOP 17
+#define SIGCONT 19
+
 // Per-CPU state
 struct cpu {
   uchar apicid;                // Local APIC ID
@@ -32,7 +38,8 @@ struct context {
   uint eip;
 };
 
-enum procstate { UNUSED, EMBRYO, SLEEPING, RUNNABLE, RUNNING, ZOMBIE };
+enum procstate { UNUSED, _UNUSED, EMBRYO, SLEEPING, _SLEEPING, RUNNABLE,  _RUNNABLE,
+        RUNNING, ZOMBIE, _ZOMBIE};
 
 // Per-process state
 struct proc {
@@ -49,6 +56,14 @@ struct proc {
   struct file *ofile[NOFILE];  // Open files
   struct inode *cwd;           // Current directory
   char name[16];               // Process name (debugging)
+
+   // ass2
+   uint pending_signals;
+   uint signal_mask;
+   void* signal_handlers[32];
+   struct trapframe* tf_backup;
+   int stopped;
+   int ignore_signals;
 };
 
 // Process memory is laid out contiguously, low addresses first:
