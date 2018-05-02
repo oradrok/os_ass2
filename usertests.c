@@ -784,10 +784,12 @@ concreate(void)
     unlink(file);
     pid = fork();
     if(pid && (i % 3) == 1){
+      printf(1, "concreate test child\n");
       link("C0", file);
     } else if(pid == 0 && (i % 5) == 1){
       link("C0", file);
     } else {
+      printf(1, "concreate parent\n");
       fd = open(file, O_CREATE | O_RDWR);
       if(fd < 0){
         printf(1, "concreate create %s failed\n", file);
