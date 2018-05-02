@@ -107,7 +107,7 @@ exec(char *path, char **argv)
     if (handler == (void*)SIG_IGN) {
       continue;
     }
-    curproc->signal_handlers[i] = SIG_DFL;
+    curproc->signal_handlers[i] = (void*)SIG_DFL;
   }
 
   switchuvm(curproc);
