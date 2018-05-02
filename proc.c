@@ -503,7 +503,7 @@ wakeup1(void *chan)
   for(p = ptable.proc; p < &ptable.proc[NPROC]; p++) {
     if (p->chan == chan && (p->state == SLEEPING || p->state == _SLEEPING)) {
       while (p->state == _SLEEPING) {
-        // busy-wait
+        panic("busy wait");
       }
       if (cas(&p->state, SLEEPING, _RUNNABLE)) {
         p->chan = 0;
