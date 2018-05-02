@@ -502,9 +502,7 @@ wakeup1(void *chan)
   pushcli();
   for(p = ptable.proc; p < &ptable.proc[NPROC]; p++) {
     if (p->chan == chan && (p->state == SLEEPING || p->state == _SLEEPING)) {
-      while (p->state == _SLEEPING) {
-        panic("busy wait!");
-      }
+
       if (cas(&p->state, SLEEPING, _RUNNABLE)) {
         p->chan = 0;
         if (!cas(&p->state, _RUNNABLE, RUNNABLE)) {
